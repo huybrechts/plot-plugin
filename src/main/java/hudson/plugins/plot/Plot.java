@@ -23,6 +23,7 @@ import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -582,8 +583,11 @@ public class Plot implements Comparable<Plot> {
                     continue; // skip this record
                 }
             } catch (NumberFormatException nfe) {
-                  LOGGER.log(Level.SEVERE, "Exception converting to integer", nfe);
+                LOGGER.log(Level.SEVERE, "Bad plot record in " + csvFile + ": " + Arrays.asList(record), nfe);
                   continue; // skip this record all together
+            } catch (ArrayIndexOutOfBoundsException nfe) {
+                LOGGER.log(Level.SEVERE, "Bad plot record in " + csvFile + ": " + Arrays.asList(record), nfe);
+                continue; // skip this record all together
             }
             Number value = null;
             try {
@@ -592,7 +596,7 @@ public class Plot implements Comparable<Plot> {
                 try {
                     value = Double.valueOf(record[0]);
                 } catch (NumberFormatException nfe2) {
-                    LOGGER.log(Level.SEVERE, "Exception converting to number", nfe2);
+                    LOGGER.log(Level.SEVERE, "Bad plot record in " + csvFile + ": " + Arrays.asList(record), nfe2);
                     continue; // skip this record all together
                 }
             }
